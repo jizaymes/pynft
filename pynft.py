@@ -8,9 +8,16 @@ import pathlib
 from rich import print as rprint
 from PIL import Image
 
-input_path = pathlib.Path(__file__).parent / 'input'
-output_path = pathlib.Path(__file__).parent / 'output'
+# Use the current folder of the script 
+input_path = pathlib.Path('.') / 'input'
+output_path = pathlib.Path('.') / 'output'
 
+# rprint(input_path)
+# rprint(output_path)
+# sys.exit()
+
+# Matches (layer_sequence)_(partname)_(image_part).png
+# Ex. 0_background_0.png, 1_border_2.png
 parts_pattern = '^(([0-9]+)_[a-zA-Z]+)_([0-9]+)\.[pP][nN][gG]$'
 
 
@@ -50,9 +57,7 @@ def make_package(file_path, foldername) -> dict:
                     parts_w_name[part_name].append(seq)
 
     # We have an background, border, and outline at minimum
-    if('0' in parts and '1' in parts and '2' in parts):
-        rprint("Cleared to move on!")
-    else:
+    if('0' not in parts and '1' not in parts and '2' not in parts):
         rprint("Not cleared to move on. Missing Background, Border, and Body outline")
         return False
 
@@ -68,7 +73,7 @@ def make_package(file_path, foldername) -> dict:
 
 # Prepare a folder to receive the processed output. Ensures it exists, if not,
 # makes it
-def prepare_output_path(output_path, package_name):
+def prepare_output_path(output_path, package_name) -> None:
     local_output_path = output_path / package_name
 
     if os.path.isdir(local_output_path) is False:
@@ -130,7 +135,7 @@ def process(package, output_path) -> bool:
         # Save it
         output.save(output_filename)
 
-    rprint(f"All done with {package['name']}\n{output_filename}")
+    rprint(f"---| All done with {package['name']} : {output_filename}")
     return True
 
 

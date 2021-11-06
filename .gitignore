@@ -1,8 +1,0 @@
-.gitignore
-.DS_Store
-*/.DS_Store
-.vscode/
-old_input/
-.venv/
-copykitties_series1*
-TODO

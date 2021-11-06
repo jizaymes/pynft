@@ -39,19 +39,22 @@ Used to construct images of various pieces into images generated randomly simila
 - Create many layer groups with lowest number being the furthest in the background, and applied to the image first, and highest number being applied last
 - Enable Generate -> Image Assets functionality and save the files in the pynft input/ folder.
 - Example layer group structure
+```
   - 4_shirtlogo
   - 3_shirt
   - 2_body
   - 1_border
   - 0_background
+ ``` 
 - Within each layer group will be the elements that can be used at random
+``` 
   - 0_background
   -- 0_background_1.png
   -- 0_background_2.png
   - 1_border
   -- 1_border_0.png
   -- 1_border_1.png
-
+```
   Run pynft with at minimum 0-2 positions (background, border, body) in place in the input subfolder. It will make an equivilent folder in the output path, creating an image compiling and layering all of the randomly selected images into an aggregate output file
 
 ## Image requirements:

@@ -1,0 +1,9 @@
+.gitignore
+output/*
+.DS_Store
+*/.DS_Store
+.vscode/
+old_input/
+.venv/
+input/copykitties_series1*
+TODO

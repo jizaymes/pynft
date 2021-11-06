@@ -5,7 +5,7 @@ layered manner. Used to construct images of various pieces into images generated
 Example folder structure:
   - Current Working Directory
    |- input/
-        |--- my_image_brand-edition1
+        |--- my_nft_brand-edition1
             |--- 0_background_0.png
             |--- 1_border_0.png
             |--- 2_body_1.png
@@ -21,14 +21,14 @@ Example folder structure:
             |--- 5_mouth_3.png
         |--- ...
     |- output/
-        |---  my_image_brand-edition1
+        |---  my_nft_brand-edition1
             |--- sdfs0f9sdf90sdf9sd90sf9d.png
             |--- fsf90s2k43kdfsdf23k32j4f.png
             |--- ....png
 
 Requirements:
 - Image sources made in gimp, photoshop (or similar)
-- Python 3, Pillow
+- Python 3, Pillow, Rich
 
 How to make source files:
 - Create photoshop file with many layers similar to the pynft_example.psd
@@ -55,7 +55,7 @@ How to make source files:
   - This border will be cropped out, but is used to allow all of the images to have the same relative coordinates. 
   - Each layer item should have this 1px black border around it in a square denoting the outer bounds of the entire image set.
   - To take advantage of Photoshop's image assets generation, name each of the layers with .png so it will automatically generate the images 
-
+  
 Includes:
  - Original .PSD file
  - Photoshop generated image assets folder with up to >90 example images

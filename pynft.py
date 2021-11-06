@@ -1,34 +1,3 @@
-'''
-Walks the current directory for any directories under an ./input subdirectory
-Processes those images into numerical-order based images to stack images in a 
-layered manner. Used to construct images of various pieces into images generated randomly
-
-Example folder structure:
-  - Current Working Directory
-   |- input/
-        |--- my_image_brand-edition1
-            |--- 0_background_0.png
-            |--- 1_border_0.png
-            |--- 2_body_1.png
-            |--- 2_body_2.png
-            |--- 3_face_1.png
-            |--- 3_face_2.png
-            |--- 3_face_3.png
-            |--- 4_eyes_1.png
-            |--- 4_eyes_2.png
-            |--- 4_eyes_3.png
-            |--- 5_mouth_1.png
-            |--- 5_mouth_2.png
-            |--- 5_mouth_3.png
-        |--- ...
-    |- output/
-        |---  my_image_brand-edition1
-            |--- sdfs0f9sdf90sdf9sd90sf9d.png
-            |--- fsf90s2k43kdfsdf23k32j4f.png
-            |--- ....png
-
-            
-'''
 import os
 import re
 import random
@@ -36,10 +5,11 @@ import sys
 import uuid
 import pathlib
 
+from rich import print as rprint
 from PIL import Image
 
-input_path = pathlib.Path(__file__).parent + '/input/'
-output_path = pathlib.Path(__file__).parent + '/output/'
+input_path = pathlib.Path(__file__).parent / 'input'
+output_path = pathlib.Path(__file__).parent / 'output'
 
 parts_pattern = '^(([0-9]+)_[a-zA-Z]+)_([0-9]+)\.[pP][nN][gG]$'
 
@@ -51,8 +21,7 @@ def make_package(file_path, foldername) -> dict:
     files_list = []  # List of files to carry forward to processing
     package = {}    # Package container to carry forward to processing
 
-    folder_path = file_path + foldername + '/'
-
+    folder_path = file_path / foldername
     with os.scandir(folder_path) as folders:
         for item in folders:
 
@@ -82,9 +51,9 @@ def make_package(file_path, foldername) -> dict:
 
     # We have an background, border, and outline at minimum
     if('0' in parts and '1' in parts and '2' in parts):
-        print("Cleared to move on!")
+        rprint("Cleared to move on!")
     else:
-        print("Not cleared to move on. Missing Background, Border, and Body outline")
+        rprint("Not cleared to move on. Missing Background, Border, and Body outline")
         return False
 
     # Make a package of all of this stuff
@@ -99,22 +68,27 @@ def make_package(file_path, foldername) -> dict:
 
 # Prepare a folder to receive the processed output. Ensures it exists, if not,
 # makes it
-def prepare_output_path(_output_path, _package_name):
-    output_path = _output_path + _package_name
+def prepare_output_path(output_path, package_name):
+    local_output_path = output_path / package_name
 
-    if os.path.isdir(output_path) is False:
-        print(f"Making output path : {output_path}")
-        os.mkdir(output_path)
+    if os.path.isdir(local_output_path) is False:
+        rprint(f"Making output path : {local_output_path}")
+        try:
+            os.mkdir(local_output_path)
+        except Exception as e:
+            rprint("Exception preparing output path {local_output_path}:\n{e}")
+            sys.exit()
+
 
 
 # Process an image, thereby gathering all of the necessary images, picking
 # random parts, and saving it to a new composite image
 def process(package, output_path) -> bool:
-    print(f"Starting to process {package['name']}")
+    rprint(f"-- Starting to process {package['name']}")
 
     # Temporary array so we can sort around the keys of the parts to ensure the
     # 0_ part is in proper numerical sequence
-    tmp_image_parts = dict()
+    tmp_image_parts = {}
 
     # Set up and open the image for each of the parts we've located.
     for part in package['parts']:
@@ -144,7 +118,7 @@ def process(package, output_path) -> bool:
     prepare_output_path(output_path, package['name'])
 
     # Set a random file-name for our output file
-    output_filename = output_path + package['name'] + '/' + uuid.uuid4().hex + '.png'
+    output_filename = output_path / package['name'] / (uuid.uuid4().hex + '.png')
 
     # Step through all of the parts list
     for part in image_parts:
@@ -156,7 +130,7 @@ def process(package, output_path) -> bool:
         # Save it
         output.save(output_filename)
 
-    print(f"All done with {package['name']} : {output_filename}")
+    rprint(f"All done with {package['name']}\n{output_filename}")
     return True
 
 
@@ -180,7 +154,8 @@ def get_image_for_part(part_name, package) -> Image:
     # TODO: This would be better only being done 1 time
     # Open our winner to get the size, and then crop it to remove the 1px
     # border
-    tmpimg = Image.open(package['input_path'] + winner)
+    tmpimg_path = package['input_path'] / winner
+    tmpimg = Image.open(tmpimg_path)
 
     # Set the height and width vars based on the size of the winning file
     h, w = tmpimg.size
@@ -200,16 +175,14 @@ def main() -> None:
             # TODO: Do something more detailed to validate its got all the proper image parts
             # than just checking if its a directory
             if item.is_dir():
-                print(f"Item is {item}")
+                rprint(f"o Found: {item.name}")
+
                 # validate that there are enough parts to construct a card and
                 # make a package
                 package = make_package(input_path, item.name)
                 if package is not False:
                     # Process this 'package' and save it in output_path
                     process(package, output_path)
-
-                # TODO: When this is safer to run, and if there is a use_case for doing this 
-                sys.exit()  # only do up to 1 directory for now
 
 
 if __name__ == "__main__":

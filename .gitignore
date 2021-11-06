@@ -5,5 +5,5 @@ output/*
 .vscode/
 old_input/
 .venv/
-input/copykitties_series1*
+copykitties_series1*
 TODO

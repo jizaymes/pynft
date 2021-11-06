@@ -1,7 +1,10 @@
-Walks the current directory for any directories under an ./input subdirectory
-Processes those images into numerical-order based images to stack images in a 
-layered manner. Used to construct images of various pieces into images generated randomly
+# Overview
 
+pynft walks the any directories under the ./input subdirectory and processes 
+those images into numerical-order based images to stack images in a layered manner.
+Used to construct images of various pieces into images generated randomly similar to CryptoPunks 
+
+```
 Example folder structure:
   - Current Working Directory
    |- input/
@@ -25,12 +28,13 @@ Example folder structure:
             |--- sdfs0f9sdf90sdf9sd90sf9d.png
             |--- fsf90s2k43kdfsdf23k32j4f.png
             |--- ....png
+```
 
-Requirements:
+# Requirements:
 - Image sources made in gimp, photoshop (or similar)
 - Python 3, Pillow, Rich
 
-How to make source files:
+# How to make source files:
 - Create photoshop file with many layers similar to the pynft_example.psd
 - Create many layer groups with lowest number being the furthest in the background, and applied to the image first, and highest number being applied last
 - Enable Generate -> Image Assets functionality and save the files in the pynft input/ folder.
@@ -56,23 +60,17 @@ How to make source files:
   - Each layer item should have this 1px black border around it in a square denoting the outer bounds of the entire image set.
   - To take advantage of Photoshop's image assets generation, name each of the layers with .png so it will automatically generate the images 
   
-Includes:
- - Original .PSD file
+Package Includes:
+ - Example .PSD file with the layer structure I used
  - Photoshop generated image assets folder with up to >90 example images
 
 Example output:
 
-```[james@Office:pynft] % python3 pynft.py
-Entered make_package with input/example_series1-assets
-Cleared to move on!
-Starting to process example_series1-assets
-Making output path : output/example_series1-assets
-All done with example_series1-assets : output/example_series1-assets/9c8871792b994079a7a3a0a178378092.png
-
-
+```
 [james@Office:pynft] % python3 pynft.py
-Entered make_package with input/example_series1-assets
+o Found: example_series1-assets
 Cleared to move on!
-Starting to process example_series1-assets
-All done with example_series1-assets : output/example_series1-assets/ac75fd432c3140718666d754ac86a67f.png
+-- Starting to process example_series1-assets
+All done with example_series1-assets
+output/example_series1-assets/36fead0fa92a4a30b30402e08c169b3a.png
 ```

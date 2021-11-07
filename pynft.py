@@ -93,14 +93,7 @@ def process(package, output_path) -> bool:
 
     # Temporary array so we can sort around the keys of the parts to ensure the
     # 0_ part is in proper numerical sequence
-    tmp_image_parts = {}
-
-    # Set up and open the image for each of the parts we've located.
-    for part in package['parts']:
-
-        # Sets it to a string since the next part which re-sorts the keys
-        # doesnt seem to work with a dict
-        tmp_image_parts[part] = ""
+    tmp_image_parts = {part: "" for part in package['parts']}
 
     # Re-order the keys to ensure numerical sequence is followed
     # Thanks google + stackoverflow
@@ -126,11 +119,11 @@ def process(package, output_path) -> bool:
     output_filename = output_path / package['name'] / (uuid.uuid4().hex + '.png')
 
     # Step through all of the parts list
-    for part in image_parts:
+    for part, value in image_parts.items():
 
         # Paste the current image on top of our new output image, starting at
         # the upper left.
-        output.paste(image_parts[part], (0, 0), image_parts[part])
+        output.paste(image_parts[part], (0, 0), value)
 
         # Save it
         output.save(output_filename)

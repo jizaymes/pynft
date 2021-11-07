@@ -12,7 +12,7 @@ from PIL import Image
 input_path = pathlib.Path('.') / 'input'
 output_path = pathlib.Path('.') / 'output'
 
-# Matches (layer_sequence)_(partname)_(image_part).png
+# Matches (layer_sequence)_(partname)_(image_seq).png
 # Ex. 0_background_0.png, 1_border_2.png
 parts_pattern = '^(([0-9]+)_[a-zA-Z]+)_([0-9]+)\.[pP][nN][gG]$'
 
@@ -32,7 +32,6 @@ def make_package(file_path, foldername) -> dict:
                 p_list = re.match(parts_pattern, item.name)
 
                 if p_list:
-                    # Add this to the ongoing files list
                     files_list.append(item.name)
                     # Pull apart the numerical sequence (ex. 0) of the image
                     # file name

@@ -12,10 +12,6 @@ from PIL import Image
 input_path = pathlib.Path('.') / 'input'
 output_path = pathlib.Path('.') / 'output'
 
-# rprint(input_path)
-# rprint(output_path)
-# sys.exit()
-
 # Matches (layer_sequence)_(partname)_(image_part).png
 # Ex. 0_background_0.png, 1_border_2.png
 parts_pattern = '^(([0-9]+)_[a-zA-Z]+)_([0-9]+)\.[pP][nN][gG]$'
